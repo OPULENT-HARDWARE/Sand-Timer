@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Digital Sand Timer Widget</title>
+  <title>Digital Sand Timer</title>
   <style>
     :root {
       --bg: #0b0c10;
@@ -16,7 +16,6 @@
       --grain-off: #171923;
       --timer-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
     }
-
     .light-mode {
       --bg: #f5f5f9;
       --bg-soft: #ffffff;
@@ -29,67 +28,39 @@
       --grain-off: #d4d7e3;
       --timer-shadow: 0 18px 40px rgba(15, 23, 42, 0.25);
     }
-
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
         "Segoe UI", sans-serif;
       background: radial-gradient(circle at top, #111827, #020617);
       color: var(--text);
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
     }
-
-    .light-mode body {
-      background: radial-gradient(circle at top, #e5e7eb, #ffffff);
-    }
-
     .sand-timer-widget {
-      position: relative;
       width: 320px;
-      max-width: 100%;
-      padding: 20px 20px 18px;
+      padding: 20px;
       border-radius: 24px;
       background: linear-gradient(145deg, var(--bg-soft), var(--bg-softer));
-      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05), var(--timer-shadow);
       border: 1px solid var(--border);
+      box-shadow: var(--timer-shadow);
       box-sizing: border-box;
     }
-
     .stw-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 10px;
     }
-
     .stw-title {
       font-size: 14px;
       font-weight: 600;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
-
-    .stw-title-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, #fff8e1, var(--accent));
-      box-shadow: 0 0 10px rgba(255, 223, 122, 0.6);
-    }
-
-    .stw-header-buttons {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
     .stw-icon-btn {
       border: none;
       border-radius: 999px;
@@ -101,81 +72,35 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 14px;
-      transition: background 0.16s ease, color 0.16s ease, transform 0.08s ease;
     }
-
-    .light-mode .stw-icon-btn {
-      background: rgba(255, 255, 255, 0.8);
-    }
-
-    .stw-icon-btn:hover {
-      background: rgba(148, 163, 184, 0.35);
-      color: var(--text);
-      transform: translateY(-1px);
-    }
-
-    .stw-icon-btn:active {
-      transform: translateY(0);
-    }
-
-    .stw-icon-btn .icon {
-      pointer-events: none;
-    }
-
-    /* Controls panel */
-
     .stw-controls {
       margin-bottom: 14px;
-      padding: 10px 12px 12px;
+      padding: 10px 12px;
       border-radius: 16px;
       background: rgba(15, 23, 42, 0.6);
       border: 1px solid rgba(148, 163, 184, 0.4);
       display: grid;
-      grid-template-columns: 1.2fr 1fr;
+      grid-template-columns: 1.2fr 1fr auto;
       gap: 8px 10px;
       font-size: 12px;
       align-items: end;
-      opacity: 1;
-      max-height: 500px;
-      transform-origin: top;
-      transform: scaleY(1);
-      transition: opacity 0.18s ease, max-height 0.18s ease, transform 0.18s ease;
     }
-
-    .light-mode .stw-controls {
-      background: rgba(248, 250, 252, 0.95);
-      border-color: #e5e7eb;
-    }
-
-    .stw-controls.hidden {
-      opacity: 0;
-      max-height: 0;
-      transform: scaleY(0.96);
-      overflow: hidden;
-      pointer-events: none;
-    }
-
     .stw-field {
       display: flex;
       flex-direction: column;
       gap: 3px;
     }
-
     .stw-label {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.09em;
       color: var(--text-muted);
     }
-
     .stw-input-wrap {
-      position: relative;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
-
     .stw-input-wrap input {
       width: 100%;
       padding: 6px 8px;
@@ -185,115 +110,44 @@
       color: var(--text);
       font-size: 12px;
       outline: none;
-      box-sizing: border-box;
     }
-
-    .light-mode .stw-input-wrap input {
-      background: #f9fafb;
-      border-color: #d1d5db;
-    }
-
-    .stw-input-wrap span {
-      font-size: 11px;
-      color: var(--text-muted);
-      padding-right: 4px;
-    }
-
-    .stw-pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 5px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      background: rgba(15, 23, 42, 0.8);
-      font-size: 11px;
-      color: var(--text-muted);
-      gap: 4px;
-      white-space: nowrap;
-    }
-
-    .light-mode .stw-pill {
-      background: #f9fafb;
-      border-color: #e5e7eb;
-    }
-
-    .stw-pill-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      box-shadow: 0 0 6px rgba(245, 203, 92, 0.6);
-    }
-
     .stw-primary-btn {
       border: none;
       border-radius: 999px;
       padding: 6px 10px;
       font-size: 12px;
-      font-weight: 500;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.09em;
       background: radial-gradient(circle at 20% 0, #fff8e1, var(--accent));
       color: #3f2a02;
       cursor: pointer;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      justify-self: end;
-      min-width: 90px;
+      min-width: 80px;
     }
-
-    .stw-primary-btn:hover {
-      filter: brightness(1.03);
-      transform: translateY(-1px);
-    }
-
-    .stw-primary-btn:active {
-      transform: translateY(0);
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
-    }
-
-    /* Timer visuals */
-
     .stw-timer-shell {
-      margin: 4px 0 10px;
+      margin: 6px 0 10px;
       display: flex;
       justify-content: center;
     }
-
     .stw-timer-body {
       position: relative;
       width: 140px;
       height: 260px;
       border-radius: 32px;
       background: radial-gradient(circle at 15% 0, #1e293b, #020617);
-      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.3),
-        0 18px 40px rgba(0, 0, 0, 0.7);
-      padding: 18px 18px;
+      padding: 18px;
       box-sizing: border-box;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
-
-    .light-mode .stw-timer-body {
-      background: radial-gradient(circle at 15% 0, #e5e7eb, #cbd5f5);
-      box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.4),
-        0 16px 34px rgba(15, 23, 42, 0.35);
-    }
-
     .stw-bulb {
-      position: relative;
       width: 100%;
       flex: 1 1 0;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-
     .stw-bulb-inner {
       position: relative;
       width: 100%;
@@ -301,26 +155,315 @@
       transform: rotate(45deg);
       border-radius: 24px;
       background: radial-gradient(circle at 50% 0, #0f172a, #020617);
-      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.8);
       overflow: hidden;
     }
-
-    .light-mode .stw-bulb-inner {
-      background: radial-gradient(circle at 50% 0, #e5e7eb, #c7cbe2);
-      box-shadow: inset 0 0 10px rgba(55, 65, 81, 0.3);
-    }
-
-    .stw-bulb-inner::before {
-      content: "";
+    .stw-grain-grid {
       position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      pointer-events: none;
+      inset: 8%;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-auto-rows: 1fr;
+      gap: 3%;
+      transform: rotate(-45deg);
+      padding: 4%;
+      box-sizing: border-box;
     }
-
+    .stw-grain {
+      border-radius: 999px;
+      background: var(--grain-off);
+      opacity: 0.28;
+      transform: scale(0.3);
+      transition: 0.12s;
+    }
+    .stw-grain.active {
+      background: radial-gradient(circle at 30% 20%, #fffbea, var(--accent));
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 0 9px rgba(250, 204, 21, 0.9);
+    }
     .stw-neck {
       position: absolute;
       top: 50%;
       left: 50%;
       width: 24px;
+      height: 55px;
+      transform: translate(-50%, -50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .stw-neck-path {
+      position: relative;
+      width: 5px;
+      height: 45px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 50% 20%, #0b0f1d, #020617);
+    }
+    .stw-falling-dot {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #fff9e6, var(--accent));
+      box-shadow: 0 0 10px rgba(253, 224, 71, 0.9);
+      opacity: 0;
+    }
+    .stw-falling-dot.animate {
+      animation: fall 0.6s linear infinite;
+      opacity: 1;
+    }
+    @keyframes fall {
+      0% { top: 6%; }
+      100% { top: 82%; }
+    }
+    .stw-footer {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .stw-time-value {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 13px;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="sand-timer-widget">
+    <div class="stw-header">
+      <div class="stw-title">Digital Sand Timer</div>
+      <button class="stw-icon-btn" id="themeToggleBtn" title="Toggle light/dark">🌙</button>
+    </div>
+
+    <div class="stw-controls">
+      <div class="stw-field">
+        <div class="stw-label">Duration</div>
+        <div class="stw-input-wrap">
+          <input id="durationInput" type="number" min="1" max="120" value="10" />
+          <span>min</span>
+        </div>
+      </div>
+      <div class="stw-field">
+        <div class="stw-label">Grains</div>
+        <div class="stw-input-wrap">
+          <span id="grainCountDisplay">0</span>
+        </div>
+      </div>
+      <button class="stw-primary-btn" id="startPauseBtn">
+        <span id="startPauseLabel">Start</span>
+      </button>
+    </div>
+
+    <div class="stw-timer-shell">
+      <div class="stw-timer-body">
+        <div class="stw-bulb">
+          <div class="stw-bulb-inner">
+            <div class="stw-grain-grid" id="topGrainGrid"></div>
+          </div>
+        </div>
+        <div class="stw-bulb">
+          <div class="stw-bulb-inner">
+            <div class="stw-grain-grid" id="bottomGrainGrid"></div>
+          </div>
+        </div>
+        <div class="stw-neck">
+          <div class="stw-neck-path">
+            <div class="stw-falling-dot" id="fallingDot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stw-footer">
+      <div>Elapsed: <span class="stw-time-value" id="elapsedLabel">00:00</span></div>
+      <div>Remaining: <span class="stw-time-value" id="remainingLabel">10:00</span></div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const MAX_DURATION_MIN = 120;
+      const MIN_DURATION_MIN = 1;
+      const MIN_GRAINS = 40;
+      const MAX_GRAINS = 240;
+      const GRAIN_SLOTS = 64;
+
+      const rootHtml = document.documentElement;
+      const topGrid = document.getElementById("topGrainGrid");
+      const bottomGrid = document.getElementById("bottomGrainGrid");
+      const fallingDot = document.getElementById("fallingDot");
+
+      const durationInput = document.getElementById("durationInput");
+      const grainCountDisplay = document.getElementById("grainCountDisplay");
+      const elapsedLabel = document.getElementById("elapsedLabel");
+      const remainingLabel = document.getElementById("remainingLabel");
+      const startPauseBtn = document.getElementById("startPauseBtn");
+      const startPauseLabel = document.getElementById("startPauseLabel");
+      const themeToggleBtn = document.getElementById("themeToggleBtn");
+
+      let totalGrains = 0;
+      let durationMs = 0;
+      let elapsedMs = 0;
+      let isRunning = false;
+      let lastTickTs = null;
+      let animFrameId = null;
+      let grainOrderIndices = [];
+
+      function clamp(val, min, max) {
+        return Math.max(min, Math.min(max, val));
+      }
+      function pad(n) { return n < 10 ? "0" + n : "" + n; }
+      function formatTime(ms) {
+        ms = Math.max(ms, 0);
+        const totalSec = Math.floor(ms / 1000);
+        const m = Math.floor(totalSec / 60);
+        const s = totalSec % 60;
+        return pad(m) + ":" + pad(s);
+      }
+      function computeGrainCount(durationMin) {
+        return clamp(Math.round(durationMin * 2), MIN_GRAINS, MAX_GRAINS);
+      }
+
+      function buildGrid(container) {
+        container.innerHTML = "";
+        const frag = document.createDocumentFragment();
+        for (let i = 0; i < GRAIN_SLOTS; i++) {
+          const dot = document.createElement("div");
+          dot.className = "stw-grain";
+          dot.dataset.index = i;
+          frag.appendChild(dot);
+        }
+        container.appendChild(frag);
+      }
+
+      function buildGrainOrder() {
+        const indices = [];
+        const size = 8;
+        for (let row = size - 1; row >= 0; row--) {
+          for (let col = 0; col < size; col++) {
+            const distanceFromCenter = Math.abs(col - (size - 1) / 2);
+            const maxDistanceAllowed = (size - row) / 1.2;
+            if (distanceFromCenter <= maxDistanceAllowed) {
+              indices.push(row * size + col);
+            }
+          }
+        }
+        const used = new Set(indices);
+        for (let i = 0; i < GRAIN_SLOTS; i++) {
+          if (!used.has(i)) indices.push(i);
+        }
+        grainOrderIndices = indices;
+      }
+
+      function updateBulbGrains(topCount, bottomCount) {
+        const topDots = topGrid.children;
+        const bottomDots = bottomGrid.children;
+        for (let i = 0; i < GRAIN_SLOTS; i++) {
+          topDots[i].classList.remove("active");
+          bottomDots[i].classList.remove("active");
+        }
+        for (let i = 0; i < topCount && i < grainOrderIndices.length; i++) {
+          topDots[grainOrderIndices[i]].classList.add("active");
+        }
+        for (let i = 0; i < bottomCount && i < grainOrderIndices.length; i++) {
+          bottomDots[grainOrderIndices[i]].classList.add("active");
+        }
+      }
+
+      function updateUiFromElapsed() {
+        const frac = durationMs > 0 ? elapsedMs / durationMs : 0;
+        const f = clamp(frac, 0, 1);
+        const topCount = Math.round(totalGrains * (1 - f));
+        const bottomCount = totalGrains - topCount;
+        updateBulbGrains(topCount, bottomCount);
+        elapsedLabel.textContent = formatTime(elapsedMs);
+        remainingLabel.textContent = formatTime(durationMs - elapsedMs);
+        if (f >= 1 && isRunning) stopTimer(false);
+      }
+
+      function tick(timestamp) {
+        if (!isRunning) return;
+        if (!lastTickTs) lastTickTs = timestamp;
+        const delta = timestamp - lastTickTs;
+        lastTickTs = timestamp;
+        elapsedMs += delta;
+        if (elapsedMs >= durationMs) elapsedMs = durationMs;
+        updateUiFromElapsed();
+        animFrameId = requestAnimationFrame(tick);
+      }
+
+      function startTimer() {
+        if (durationMs <= 0) return;
+        isRunning = true;
+        startPauseLabel.textContent = "Pause";
+        fallingDot.classList.add("animate");
+        lastTickTs = null;
+        animFrameId = requestAnimationFrame(tick);
+      }
+
+      function stopTimer(reset) {
+        isRunning = false;
+        startPauseLabel.textContent = "Start";
+        fallingDot.classList.remove("animate");
+        if (animFrameId != null) cancelAnimationFrame(animFrameId);
+        animFrameId = null;
+        if (reset) {
+          elapsedMs = 0;
+          updateUiFromElapsed();
+        }
+      }
+
+      function applyDuration() {
+        let minutes = parseInt(durationInput.value, 10);
+        if (isNaN(minutes)) minutes = 10;
+        minutes = clamp(minutes, MIN_DURATION_MIN, MAX_DURATION_MIN);
+        durationInput.value = minutes;
+        durationMs = minutes * 60 * 1000;
+        elapsedMs = 0;
+        totalGrains = computeGrainCount(minutes);
+        grainCountDisplay.textContent = totalGrains;
+        updateUiFromElapsed();
+      }
+
+      startPauseBtn.addEventListener("click", () => {
+        if (!isRunning) {
+          if (elapsedMs >= durationMs) elapsedMs = 0;
+          startTimer();
+        } else {
+          stopTimer(false);
+        }
+      });
+
+      durationInput.addEventListener("change", () => {
+        applyDuration();
+        if (isRunning) {
+          stopTimer(true);
+          startTimer();
+        }
+      });
+
+      themeToggleBtn.addEventListener("click", () => {
+        const isLight = rootHtml.classList.contains("light-mode");
+        if (isLight) {
+          rootHtml.classList.remove("light-mode");
+          themeToggleBtn.textContent = "🌙";
+        } else {
+          rootHtml.classList.add("light-mode");
+          themeToggleBtn.textContent = "☀️";
+        }
+      });
+
+      buildGrid(topGrid);
+      buildGrid(bottomGrid);
+      buildGrainOrder();
+      applyDuration();
+    })();
+  </script>
+</body>
+</html>
